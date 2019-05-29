@@ -99,6 +99,8 @@ def main(argv):
             values_found_in_cache = 0
             input_file.readline()
             for line in input_file:
+                if line == '' or line == None:
+                    continue
                 if line in already_decoded:
                     decoded_values = already_decoded.get(line)
                     write_to_file(output_file, decoded_values)
