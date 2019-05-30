@@ -3,6 +3,10 @@
 
 import geocoder
 import sys, getopt
+import logging
+
+logger = logging.getLogger(__name__)
+logging.disable(logging.ERROR)
 
 COLUMNSEPERATOR = ';'
 
@@ -97,9 +101,12 @@ def main(argv):
             already_decoded = dict()
             values_looked_up_online = 0
             values_found_in_cache = 0
+            values_blank = 0
+            values_not_found = 0
             input_file.readline()
             for line in input_file:
                 if line == '' or line == None:
+                    values_blank = values_blank + 1
                     continue
                 if line in already_decoded:
                     decoded_values = already_decoded.get(line)
@@ -107,6 +114,12 @@ def main(argv):
                     values_found_in_cache = values_found_in_cache + 1
                 else:
                     g = geocoder.geonames(line, method='details', key=genonames_user)
+                    if not g.ok:
+                        print("Fant ikke noe treff på linje " + 
+                            str( 1 + values_blank + values_not_found + values_found_in_cache + values_looked_up_online) +
+                            "; " + str(line))
+                        values_not_found = values_not_found + 1
+                    break
                     decoded_values = dict()
                     if g != None:
                         decoded_values['geonamesId'] = str(g.geonames_id) if g.geonames_id != None else '' 
@@ -118,7 +131,10 @@ def main(argv):
                     write_to_file(output_file, decoded_values)
                     already_decoded[line] = decoded_values
                     values_looked_up_online = values_looked_up_online + 1
-    print(' = Fant totalt ' + str(values_looked_up_online + values_found_in_cache) + ' geonames ids.\n' 
-        + ' = Hvorav ' + str(values_looked_up_online) + ' er unike goenames ids i denne filen')
+    print('\n = Leste totalt ' + str(values_looked_up_online + values_found_in_cache + values_not_found + values_blank) + ' Linjer. Hvor:\n' +
+        ' = ' + str(values_found_in_cache + values_looked_up_online) + ' geonames ble funnet\n' +
+        ' = ' + str(values_looked_up_online) + ' er unike goenames ids i denne filen,\n' + 
+        ' = ' + str(values_not_found) + ' geonames ikke ble funnet,\n' +
+        ' = ' + str(values_blank) + ' linjer ikke inneholdt noen verdi.')
 if __name__ == "__main__":
     main(sys.argv[1:])
