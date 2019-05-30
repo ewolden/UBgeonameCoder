@@ -61,7 +61,7 @@ def main(argv):
     output_format = ''
     genonames_user = ''
     try:
-        opts, args = getopt.getopt(argv,'hi:o:u:f',['help', 'input=', 'output=', 'user=','format='])
+        opts, args = getopt.getopt(argv,'hi:o:u:f:',['help', 'input=', 'output=', 'user=','format='])
     except getopt.GetoptError:
         print_usage()
         sys.exit(2)
@@ -109,12 +109,12 @@ def main(argv):
                     g = geocoder.geonames(line, method='details', key=genonames_user)
                     decoded_values = dict()
                     if g != None:
-                        decoded_values['geonamesId'] = str(g.geonames_id)
-                        decoded_values['Latitiude'] = str(g.lat)
-                        decoded_values['Longitude'] = str(g.lng)
-                        decoded_values['LatLong'] = str(g.lat) + ',' + str(g.lng)
-                        decoded_values['Land'] = g.country
-                        decoded_values['Sted'] = g.address
+                        decoded_values['geonamesId'] = str(g.geonames_id != None ? g.geonames_id : '') 
+                        decoded_values['Latitiude'] = str(g.lat != None ? g.lat : '')
+                        decoded_values['Longitude'] = str(g.lng != None ? g.lng : '')
+                        decoded_values['LatLong'] = decoded_values['Latitiude'] + ',' + decoded_values['Longitude']
+                        decoded_values['Land'] = str(g.country != None ? g.country : '')
+                        decoded_values['Sted'] = str(g.address != None ? g.address : '')
                     write_to_file(output_file, decoded_values)
                     already_decoded[line] = decoded_values
                     values_looked_up_online = values_looked_up_online + 1
