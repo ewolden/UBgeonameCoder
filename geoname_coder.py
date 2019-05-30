@@ -109,12 +109,12 @@ def main(argv):
                     g = geocoder.geonames(line, method='details', key=genonames_user)
                     decoded_values = dict()
                     if g != None:
-                        decoded_values['geonamesId'] = str(g.geonames_id != None ? g.geonames_id : '') 
-                        decoded_values['Latitiude'] = str(g.lat != None ? g.lat : '')
-                        decoded_values['Longitude'] = str(g.lng != None ? g.lng : '')
+                        decoded_values['geonamesId'] = str(g.geonames_id) if g.geonames_id != None else '' 
+                        decoded_values['Latitiude'] = str(g.lat) if g.lat != None else ''
+                        decoded_values['Longitude'] = str(g.lng) if g.lng != None else ''
                         decoded_values['LatLong'] = decoded_values['Latitiude'] + ',' + decoded_values['Longitude']
-                        decoded_values['Land'] = str(g.country != None ? g.country : '')
-                        decoded_values['Sted'] = str(g.address != None ? g.address : '')
+                        decoded_values['Land'] = str(g.country) if g.country != None else ''
+                        decoded_values['Sted'] = str(g.address) if g.address != None else ''
                     write_to_file(output_file, decoded_values)
                     already_decoded[line] = decoded_values
                     values_looked_up_online = values_looked_up_online + 1
