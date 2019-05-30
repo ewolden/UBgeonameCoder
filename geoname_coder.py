@@ -119,7 +119,6 @@ def main(argv):
                             str( 1 + values_blank + values_not_found + values_found_in_cache + values_looked_up_online) +
                             "; " + str(line))
                         values_not_found = values_not_found + 1
-                    break
                     decoded_values = dict()
                     if g != None:
                         decoded_values['geonamesId'] = str(g.geonames_id) if g.geonames_id != None else '' 
