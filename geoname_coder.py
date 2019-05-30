@@ -91,7 +91,7 @@ def main(argv):
     if output_filename == 'output.csv':
         print(' - Outputfil ikke spesifisert, skriver til output.csv')
     if output_format == '':
-        print(' - Geocode format ikke spesifisert, skriver fult format')
+        print(' - Geocode format ikke spesifisert, skriver full format')
 
 
 
